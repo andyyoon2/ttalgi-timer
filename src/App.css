@@ -5,5 +5,7 @@
 }
 
 .title {
-  font-size: 96px;
+  /* TODO improve colors, this is low contrast */
+  color: #bab9b9;
+  font-size: 80px;
 }
