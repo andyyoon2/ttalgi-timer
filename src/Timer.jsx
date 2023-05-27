@@ -1,4 +1,4 @@
-import { createSignal } from 'solid-js';
+import { createSignal, onCleanup } from 'solid-js';
 import ControlButtons from './ControlButtons';
 import TimerDisplay from './TimerDisplay';
 
@@ -7,7 +7,8 @@ Timer states
 POMO_READY
 POMO_COUNTDOWN
 BREAK_COUNTDOWN
-PAUSE
+POMO_PAUSE
+BREAK_PAUSE
 SHORT_BREAK_READY
 LONG_BREAK_READY
 */
@@ -15,8 +16,10 @@ LONG_BREAK_READY
 export default function Timer() {
   const [time, setTime] = createSignal(0);
   const [pomoCount, setPomoCount] = createSignal(0);
-  const [timerInterval, setTimerInterval] = createSignal(null);
+  const [timerId, setTimerId] = createSignal(null);
   const [timerState, setTimerState] = createSignal('POMO_READY');
+
+  onCleanup(() => clearTimeout(timerId()));
 
   function start() {
     let newTime;
@@ -41,7 +44,7 @@ export default function Timer() {
   }
 
   function startTimer() {
-    if (timerInterval()) {
+    if (timerId()) {
       return;
     }
     tick();
@@ -49,9 +52,9 @@ export default function Timer() {
 
   function tick() {
     // TODO: Calculate drift to get most accurate timer
-    setTimerInterval(
+    setTimerId(
       setTimeout(() => {
-        setTime(time() - 1);
+        setTime(time => time - 1);
         if (time() === 0) {
           completeCountdown();
           return;
@@ -62,18 +65,30 @@ export default function Timer() {
   }
 
   function stopTimer() {
-    clearTimeout(timerInterval());
-    setTimerInterval(null);
+    clearTimeout(timerId());
+    setTimerId(null);
   }
 
   function toggleCountdown() {
-    if (timerState() === 'POMO_COUNTDOWN' || timerState() === 'BREAK_COUNTDOWN') {
-      stopTimer();
-      setTimerState('PAUSE');
-    } else if (timerState() === 'PAUSE') {
-      startTimer();
-    } else {
-      start();
+    switch (timerState()) {
+      case 'POMO_COUNTDOWN':
+        stopTimer();
+        setTimerState('POMO_PAUSE');
+        break;
+      case 'BREAK_COUNTDOWN':
+        stopTimer();
+        setTimerState('BREAK_PAUSE');
+        break;
+      case 'POMO_PAUSE':
+        startTimer();
+        setTimerState('POMO_COUNTDOWN');
+        break;
+      case 'BREAK_PAUSE':
+        startTimer();
+        setTimerState('BREAK_COUNTDOWN');
+        break;
+      default:
+        start();
     }
   }
 
@@ -86,7 +101,7 @@ export default function Timer() {
   function completeCountdown() {
     stopTimer();
     if (timerState() === 'POMO_COUNTDOWN') {
-      setPomoCount(pomoCount() + 1);
+      setPomoCount(count => count + 1);
       if (pomoCount() % 4 === 0) {
         setTimerState('LONG_BREAK_READY');
       } else {

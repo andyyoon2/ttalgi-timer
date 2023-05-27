@@ -1,5 +1,11 @@
 export default function ControlButtons(props) {
-  const toggleLabel = () => props.timerState === 'COUNTDOWN' ? 'Pause' : 'Start';
+  const toggleLabel = () => {
+    if (props.timerState === 'POMO_COUNTDOWN' || props.timerState === 'BREAK_COUNTDOWN') {
+      return 'Pause';
+    } else {
+      return 'Start';
+    }
+  };
 
   return (
     <div>
