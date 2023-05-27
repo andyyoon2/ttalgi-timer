@@ -24,7 +24,7 @@ const COUNTDOWN_TIMES = {
 
 export default function Timer() {
   const [time, setTime] = createSignal(0);
-  const [pomoCount, setPomoCount] = createSignal(0);
+  const [pomoCount, setPomoCount] = createSignal(0); // TODO: Use localStorage for total count?
   const [timerId, setTimerId] = createSignal(null);
 
   const [timerType, setTimerType] = createSignal('POMO');
@@ -118,7 +118,7 @@ export default function Timer() {
         toggleCountdown={toggleCountdown}
         resetTimer={resetTimer}
       />
-      <p class="pomo-count">pomodoros today: {pomoCount()}</p>
+      <p class="pomo-count">pomodoros completed: {pomoCount()}</p>
     </div>
   );
 }
