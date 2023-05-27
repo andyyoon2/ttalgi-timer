@@ -1,32 +1,42 @@
-import { createSignal, createEffect } from 'solid-js';
+import { createSignal } from 'solid-js';
+import ControlButtons from './ControlButtons';
+import TimerDisplay from './TimerDisplay';
 
 /*
-TODO: proper timer states
+Timer states
 POMO_READY
-COUNTDOWN
-POMO_DONE
+POMO_COUNTDOWN
+BREAK_COUNTDOWN
+PAUSE
+SHORT_BREAK_READY
 LONG_BREAK_READY
 */
 
 export default function Timer() {
   const [time, setTime] = createSignal(0);
+  const [pomoCount, setPomoCount] = createSignal(0);
   const [timerInterval, setTimerInterval] = createSignal(null);
-  const [timeDisplay, setTimeDisplay] = createSignal('Start');
-  const [timerState, setTimerState] = createSignal('DONE');
-
-  createEffect(() => {
-    const min = Math.floor(time() / 60);
-    const sec = time() % 60;
-    setTimeDisplay(`${min < 10 ? '0' : ''}${min}:${sec < 10 ? '0' : ''}${sec}`);
-  });
+  const [timerState, setTimerState] = createSignal('POMO_READY');
 
   function start() {
-    if (timerState === 'COUNTDOWN') {
-      return;
+    let newTime;
+    switch (timerState()) {
+      case 'POMO_READY':
+        newTime = 5 //25 * 60;
+        setTimerState('POMO_COUNTDOWN');
+        break;
+      case 'SHORT_BREAK_READY':
+        newTime = 2 //5 * 60;
+        setTimerState('BREAK_COUNTDOWN');
+        break;
+      case 'LONG_BREAK_READY':
+        newTime = 3 //10 * 60;
+        setTimerState('BREAK_COUNTDOWN');
+        break;
+      default:
+        return;
     }
-    setTimerState('COUNTDOWN');
-    // setTime(25 * 60);
-    setTime(5);
+    setTime(newTime);
     startTimer();
   }
 
@@ -43,7 +53,7 @@ export default function Timer() {
       setTimeout(() => {
         setTime(time() - 1);
         if (time() === 0) {
-          resetTimer();
+          completeCountdown();
           return;
         }
         tick();
@@ -51,22 +61,52 @@ export default function Timer() {
     );
   }
 
-  function pauseTimer() {
+  function stopTimer() {
     clearTimeout(timerInterval());
     setTimerInterval(null);
   }
 
+  function toggleCountdown() {
+    if (timerState() === 'POMO_COUNTDOWN' || timerState() === 'BREAK_COUNTDOWN') {
+      stopTimer();
+      setTimerState('PAUSE');
+    } else if (timerState() === 'PAUSE') {
+      startTimer();
+    } else {
+      start();
+    }
+  }
+
   function resetTimer() {
-    setTimerState('DONE');
-    pauseTimer();
+    stopTimer();
     setTime(0);
+    setTimerState('POMO_READY');
+  }
+
+  function completeCountdown() {
+    stopTimer();
+    if (timerState() === 'POMO_COUNTDOWN') {
+      setPomoCount(pomoCount() + 1);
+      if (pomoCount() % 4 === 0) {
+        setTimerState('LONG_BREAK_READY');
+      } else {
+        setTimerState('SHORT_BREAK_READY');
+      }
+    } else {
+      setTimerState('POMO_READY');
+    }
   }
 
   return (
     <div>
-      <button onClick={start}>Start</button>
-      <h2>{timeDisplay()}</h2>
-      {/* <p>{timerState()}</p> */}
+      <TimerDisplay time={time()} />
+      <ControlButtons
+        timerState={timerState()}
+        start={start}
+        toggleCountdown={toggleCountdown}
+        resetTimer={resetTimer}
+      />
+      <p>Pomos today: {pomoCount()}</p>
     </div>
   );
 }
