@@ -4,3 +4,8 @@
   align-items: center;
   flex-wrap: wrap;
 }
+@media (max-width: 390px) {
+  .timer-selectors .btn {
+    font-size: 20px;
+  }
+}

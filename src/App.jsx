@@ -5,8 +5,9 @@ function App() {
   return (
     <div>
       <main>
+        <h1>ttalgi timer</h1>
+        <h2>a sweeter pomodoro timer</h2>
         <div class="container">
-          <h1 class="title">ttalgi timer</h1>
           <Timer />
         </div>
       </main>
