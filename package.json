@@ -1,6 +1,6 @@
 {
   "name": "ttalgi-timer",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A sweeter pomodoro timer",
   "scripts": {
     "start": "vite",
