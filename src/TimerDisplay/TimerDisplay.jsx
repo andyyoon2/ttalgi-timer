@@ -1,3 +1,5 @@
+import './TimerDisplay.css';
+
 export default function TimerDisplay(props) {
   const min = () => Math.floor(props.time / 60);
   const sec = () => props.time % 60;
@@ -5,7 +7,7 @@ export default function TimerDisplay(props) {
 
   return (
     <div>
-      <p>{display()}</p>
+      <p class="display">{display()}</p>
     </div>
   );
 }

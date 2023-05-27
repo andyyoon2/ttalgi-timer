@@ -1,6 +1,6 @@
 import { createSignal, onCleanup } from 'solid-js';
 import ControlButtons from './ControlButtons';
-import TimerDisplay from './TimerDisplay';
+import TimerDisplay from './TimerDisplay/TimerDisplay';
 
 /*
 Timer states
