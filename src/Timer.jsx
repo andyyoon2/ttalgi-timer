@@ -14,7 +14,7 @@ LONG_BREAK_READY
 */
 
 export default function Timer() {
-  const [time, setTime] = createSignal(0);
+  const [time, setTime] = createSignal(25 * 60);
   const [pomoCount, setPomoCount] = createSignal(0);
   const [timerId, setTimerId] = createSignal(null);
   const [timerState, setTimerState] = createSignal('POMO_READY');

@@ -1,11 +1,14 @@
 import Timer from './Timer';
+import './App.css';
 
 function App() {
   return (
     <div>
       <main>
-        <h1>Ttalgi Timer</h1>
-        <Timer />
+        <div class="container">
+          <h1 class="title">ttalgi timer</h1>
+          <Timer />
+        </div>
       </main>
     </div>
   );
