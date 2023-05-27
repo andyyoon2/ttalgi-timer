@@ -1,3 +1,4 @@
+import { createEffect } from 'solid-js';
 import './TimerDisplay.css';
 
 export default function TimerDisplay(props) {
@@ -9,6 +10,13 @@ export default function TimerDisplay(props) {
     const sec = props.time % 60;
     return `${sec < 10 ? '0' : ''}${sec}`;
   }
+  createEffect(() => {
+    if (props.timerState === 'READY') {
+      document.title = `ttalgi timer`;
+    } else {
+      document.title = `${minDisplay()}:${secDisplay()} | ttalgi timer`;
+    }
+  });
 
   return (
     <div>

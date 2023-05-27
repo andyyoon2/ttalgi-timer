@@ -109,7 +109,10 @@ export default function Timer() {
         timerType={timerType()}
         selectTimerType={selectTimerType}
       />
-      <TimerDisplay time={time()} />
+      <TimerDisplay
+        timerState={timerState()}
+        time={time()}
+      />
       <ControlButtons
         timerState={timerState()}
         toggleCountdown={toggleCountdown}
