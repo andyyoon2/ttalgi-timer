@@ -8,5 +8,6 @@
   /* TODO improve colors, this is low contrast */
   color: #bab9b9;
   font-size: 80px;
-  margin: 0.5em;
+  margin-top: 0.5em;
+  margin-bottom: 0.85em;
 }

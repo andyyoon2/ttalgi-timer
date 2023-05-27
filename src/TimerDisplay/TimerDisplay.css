@@ -3,6 +3,7 @@
   font-family: 'Chivo Mono',
     source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+  margin: 0.75em 0;
 }
 .skinny-colon {
   display: inline-block;
