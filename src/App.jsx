@@ -4,7 +4,7 @@ function App() {
   return (
     <div>
       <main>
-        <h1>Solid Pomodoro</h1>
+        <h1>Ttalgi Timer</h1>
         <Timer />
       </main>
     </div>

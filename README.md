@@ -1,12 +1,12 @@
-# Solid Pomodoro
+# Ttalgi Timer
 
-A basic pomodoro timer, built with Solid.
+A sweeter pomodoro timer, built with [Solid](https://www.solidjs.com/) (and strawberries).
 
 ## Running locally
 
 ```bash
 > git clone <url>
-> cd solid-pomodoro
+> cd ttalgi-timer
 > yarn install
 > yarn dev
 ```
