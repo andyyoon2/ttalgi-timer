@@ -25,15 +25,15 @@ export default function Timer() {
     let newTime;
     switch (timerState()) {
       case 'POMO_READY':
-        newTime = 5 //25 * 60;
+        newTime = 25 * 60;
         setTimerState('POMO_COUNTDOWN');
         break;
       case 'SHORT_BREAK_READY':
-        newTime = 2 //5 * 60;
+        newTime = 5 * 60;
         setTimerState('BREAK_COUNTDOWN');
         break;
       case 'LONG_BREAK_READY':
-        newTime = 3 //10 * 60;
+        newTime = 10 * 60;
         setTimerState('BREAK_COUNTDOWN');
         break;
       default:
