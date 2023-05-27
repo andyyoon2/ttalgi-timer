@@ -12,7 +12,7 @@ export default function ControlButtons(props) {
 
   return (
     <div class="control-buttons">
-      <Button class="start-btn fill" onClick={() => props.toggleCountdown()}>{toggleLabel()}</Button>
+      <Button class="start-btn fill accent" onClick={() => props.toggleCountdown()}>{toggleLabel()}</Button>
       <Button class="reset-btn outline" onClick={() => props.resetTimer()}>Reset</Button>
     </div>
   );

@@ -22,3 +22,11 @@
   transform: translateY(-1px);
   box-shadow: 0 1px 4px #c5aeb2;
 }
+.btn.fill.accent {
+  background-color: #f84867;
+  box-shadow: 0 1px 12px #fa7990;
+  color: #fffdfe;
+}
+.btn.fill.accent:hover {
+  box-shadow: 0 3px 14px 2px #fa7990;
+}
