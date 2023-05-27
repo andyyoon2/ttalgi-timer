@@ -88,7 +88,7 @@ export default function Timer() {
     }
   }
 
-  function selectCountdownType(type) {
+  function selectTimerType(type) {
     if (type !== 'POMO' && type !== 'SHORT_BREAK' && type !== 'LONG_BREAK') {
       console.error('Error: Invalid timer type.');
       return;
@@ -99,7 +99,10 @@ export default function Timer() {
 
   return (
     <div>
-      <TimerSelectors selectCountdownType={selectCountdownType} />
+      <TimerSelectors
+        timerType={timerType()}
+        selectTimerType={selectTimerType}
+      />
       <TimerDisplay time={time()} />
       <ControlButtons
         timerState={timerState()}

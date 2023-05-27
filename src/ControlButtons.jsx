@@ -11,8 +11,8 @@ export default function ControlButtons(props) {
 
   return (
     <div>
-      <Button onClick={() => props.resetTimer()}>Reset</Button>
-      <Button onClick={() => props.toggleCountdown()}>{toggleLabel()}</Button>
+      <Button class="fill" onClick={() => props.toggleCountdown()}>{toggleLabel()}</Button>
+      <Button class="outline" onClick={() => props.resetTimer()}>Reset</Button>
     </div>
   );
 }
