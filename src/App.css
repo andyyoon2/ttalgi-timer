@@ -1,5 +1,5 @@
 .container {
-  max-width: 600px;
+  max-width: 450px;
   margin: 0 auto;
   text-align: center;
 }
@@ -8,4 +8,5 @@
   /* TODO improve colors, this is low contrast */
   color: #bab9b9;
   font-size: 80px;
+  margin: 0.5em;
 }

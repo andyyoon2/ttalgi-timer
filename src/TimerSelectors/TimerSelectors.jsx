@@ -3,7 +3,7 @@ import './TimerSelectors.css';
 
 export default function TimerSelectors(props) {
   return (
-    <div>
+    <div class="timer-selectors">
       <Button
         class={props.timerType === 'POMO' ? 'fill' : 'outline'}
         onClick={() => props.selectTimerType('POMO')}
