@@ -1,17 +1,24 @@
 import { createSignal, onCleanup } from 'solid-js';
 import ControlButtons from './ControlButtons';
 import TimerDisplay from './TimerDisplay/TimerDisplay';
+import TimerSelectors from './TimerSelectors/TimerSelectors';
 
 /*
 Timer states
 POMO_READY
-POMO_COUNTDOWN
-BREAK_COUNTDOWN
-POMO_PAUSE
-BREAK_PAUSE
 SHORT_BREAK_READY
 LONG_BREAK_READY
+POMO_COUNTDOWN
+SHORT_BREAK_COUNTDOWN
+LONG_BREAK_COUNTDOWN
+POMO_PAUSE
+SHORT_BREAK_PAUSE
+LONG_BREAK_PAUSE
 */
+
+const POMO_TIME = 25 * 60;
+const SHORT_BREAK_TIME = 5 * 60;
+const LONG_BREAK_TIME = 15 * 60;
 
 export default function Timer() {
   const [time, setTime] = createSignal(25 * 60);
@@ -25,16 +32,16 @@ export default function Timer() {
     let newTime;
     switch (timerState()) {
       case 'POMO_READY':
-        newTime = 25 * 60;
+        newTime = POMO_TIME;
         setTimerState('POMO_COUNTDOWN');
         break;
       case 'SHORT_BREAK_READY':
-        newTime = 5 * 60;
-        setTimerState('BREAK_COUNTDOWN');
+        newTime = SHORT_BREAK_TIME;
+        setTimerState('SHORT_BREAK_COUNTDOWN');
         break;
       case 'LONG_BREAK_READY':
-        newTime = 10 * 60;
-        setTimerState('BREAK_COUNTDOWN');
+        newTime = LONG_BREAK_TIME;
+        setTimerState('LONG_BREAK_COUNTDOWN');
         break;
       default:
         return;
@@ -93,9 +100,17 @@ export default function Timer() {
   }
 
   function resetTimer() {
+    if (timerState() !== 'POMO_COUNTDOWN' || timerState() !== 'BREAK_COUNTDOWN') {
+      return;
+    }
     stopTimer();
-    setTime(0);
-    setTimerState('POMO_READY');
+    if (timerState() === 'POMO_COUNTDOWN') {
+      setTime(POMO_TIME);
+      setTimerState('POMO_READY');
+    } else {
+      setTime(SHORT_BREAK_TIME);
+      setTimerState('SHORT_BREAK_READY');
+    }
   }
 
   function completeCountdown() {
@@ -112,8 +127,32 @@ export default function Timer() {
     }
   }
 
+  function selectPomo() {
+    stopTimer();
+    setTimerState('POMO_READY');
+    start();
+  }
+
+  function selectShortBreak() {
+    stopTimer();
+    setTimerState('SHORT_BREAK_READY');
+    start();
+  }
+
+  function selectLongBreak() {
+    stopTimer();
+    setTimerState('LONG_BREAK_READY');
+    start();
+  }
+
   return (
     <div>
+      <TimerSelectors
+        timerState={timerState()}
+        selectPomo={selectPomo}
+        selectShortBreak={selectShortBreak}
+        selectLongBreak={selectLongBreak}
+      />
       <TimerDisplay time={time()} />
       <ControlButtons
         timerState={timerState()}
