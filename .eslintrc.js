@@ -3,7 +3,8 @@ module.exports = {
         "browser": true,
         "es2021": true
     },
-    "extends": "eslint:recommended",
+    "plugins": ["solid"],
+    "extends": ["eslint:recommended", "plugin:solid/recommended"],
     "overrides": [
     ],
     "parserOptions": {
