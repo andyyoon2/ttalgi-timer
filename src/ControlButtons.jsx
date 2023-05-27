@@ -1,3 +1,5 @@
+import Button from './Button/Button';
+
 export default function ControlButtons(props) {
   const toggleLabel = () => {
     if (props.timerState === 'POMO_COUNTDOWN' || props.timerState === 'BREAK_COUNTDOWN') {
@@ -9,8 +11,8 @@ export default function ControlButtons(props) {
 
   return (
     <div>
-      <button onClick={() => props.resetTimer()}>Reset</button>
-      <button onClick={() => props.toggleCountdown()}>{toggleLabel()}</button>
+      <Button onClick={() => props.resetTimer()}>Reset</Button>
+      <Button onClick={() => props.toggleCountdown()}>{toggleLabel()}</Button>
     </div>
   );
 }

@@ -1,0 +1,18 @@
+.btn {
+  font-family: inherit;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  border-radius: 60px;
+  height: 60px;
+  padding: 0 24px;
+  text-transform: lowercase;
+  font-size: 24px;
+  background-color: #fcaab9;
+  transition: all ease 0.2s;
+}
+.btn:hover {
+  background-color: #fa7990;
+  transform: translateY(-1px);
+  box-shadow: 0 1px 4px #c5aeb2;
+}
