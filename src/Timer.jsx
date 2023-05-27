@@ -1,54 +1,53 @@
-import { createSignal, onCleanup } from 'solid-js';
+import { createEffect, createSignal, onCleanup } from 'solid-js';
 import ControlButtons from './ControlButtons';
 import TimerDisplay from './TimerDisplay/TimerDisplay';
 import TimerSelectors from './TimerSelectors/TimerSelectors';
 
 /*
-Timer states
-POMO_READY
-SHORT_BREAK_READY
-LONG_BREAK_READY
-POMO_COUNTDOWN
-SHORT_BREAK_COUNTDOWN
-LONG_BREAK_COUNTDOWN
-POMO_PAUSE
-SHORT_BREAK_PAUSE
-LONG_BREAK_PAUSE
+TIMER TYPE
+POMO
+SHORT_BREAK
+LONG_BREAK
+
+TIMER STATE
+READY
+COUNTDOWN
+STOP
 */
 
-const POMO_TIME = 25 * 60;
-const SHORT_BREAK_TIME = 5 * 60;
-const LONG_BREAK_TIME = 15 * 60;
+const COUNTDOWN_TIMES = {
+  'POMO': 25 * 60,
+  'SHORT_BREAK': 5 * 60,
+  'LONG_BREAK': 10 * 60,
+};
 
 export default function Timer() {
-  const [time, setTime] = createSignal(25 * 60);
+  const [time, setTime] = createSignal(0);
   const [pomoCount, setPomoCount] = createSignal(0);
   const [timerId, setTimerId] = createSignal(null);
-  const [timerState, setTimerState] = createSignal('POMO_READY');
 
-  onCleanup(() => clearTimeout(timerId()));
+  const [timerType, setTimerType] = createSignal('POMO');
+  const [timerState, setTimerState] = createSignal('READY');
 
-  function start() {
-    let newTime;
+  createEffect(() => {
     switch (timerState()) {
-      case 'POMO_READY':
-        newTime = POMO_TIME;
-        setTimerState('POMO_COUNTDOWN');
+      case 'READY':
+        stopTimer();
+        setTime(COUNTDOWN_TIMES[timerType()]);
         break;
-      case 'SHORT_BREAK_READY':
-        newTime = SHORT_BREAK_TIME;
-        setTimerState('SHORT_BREAK_COUNTDOWN');
+      case 'COUNTDOWN':
+        startTimer();
         break;
-      case 'LONG_BREAK_READY':
-        newTime = LONG_BREAK_TIME;
-        setTimerState('LONG_BREAK_COUNTDOWN');
+      case 'STOP':
+        stopTimer();
         break;
       default:
+        console.error('Error: Invalid timer state.');
         return;
     }
-    setTime(newTime);
-    startTimer();
-  }
+  });
+
+  onCleanup(() => clearTimeout(timerId()));
 
   function startTimer() {
     if (timerId()) {
@@ -63,7 +62,8 @@ export default function Timer() {
       setTimeout(() => {
         setTime(time => time - 1);
         if (time() === 0) {
-          completeCountdown();
+          setPomoCount(c => c + 1);
+          setTimerState('STOP'); // TODO: Optional advance to next step in pomo cycle
           return;
         }
         tick();
@@ -76,91 +76,37 @@ export default function Timer() {
     setTimerId(null);
   }
 
+  function resetTimer() {
+    setTimerState('READY');
+  }
+
   function toggleCountdown() {
-    switch (timerState()) {
-      case 'POMO_COUNTDOWN':
-        stopTimer();
-        setTimerState('POMO_PAUSE');
-        break;
-      case 'BREAK_COUNTDOWN':
-        stopTimer();
-        setTimerState('BREAK_PAUSE');
-        break;
-      case 'POMO_PAUSE':
-        startTimer();
-        setTimerState('POMO_COUNTDOWN');
-        break;
-      case 'BREAK_PAUSE':
-        startTimer();
-        setTimerState('BREAK_COUNTDOWN');
-        break;
-      default:
-        start();
+    if (timerState() === 'COUNTDOWN') {
+      setTimerState('STOP');
+    } else {
+      setTimerState('COUNTDOWN');
     }
   }
 
-  function resetTimer() {
-    if (timerState() !== 'POMO_COUNTDOWN' || timerState() !== 'BREAK_COUNTDOWN') {
+  function selectCountdownType(type) {
+    if (type !== 'POMO' && type !== 'SHORT_BREAK' && type !== 'LONG_BREAK') {
+      console.error('Error: Invalid timer type.');
       return;
     }
-    stopTimer();
-    if (timerState() === 'POMO_COUNTDOWN') {
-      setTime(POMO_TIME);
-      setTimerState('POMO_READY');
-    } else {
-      setTime(SHORT_BREAK_TIME);
-      setTimerState('SHORT_BREAK_READY');
-    }
-  }
-
-  function completeCountdown() {
-    stopTimer();
-    if (timerState() === 'POMO_COUNTDOWN') {
-      setPomoCount(count => count + 1);
-      if (pomoCount() % 4 === 0) {
-        setTimerState('LONG_BREAK_READY');
-      } else {
-        setTimerState('SHORT_BREAK_READY');
-      }
-    } else {
-      setTimerState('POMO_READY');
-    }
-  }
-
-  function selectPomo() {
-    stopTimer();
-    setTimerState('POMO_READY');
-    start();
-  }
-
-  function selectShortBreak() {
-    stopTimer();
-    setTimerState('SHORT_BREAK_READY');
-    start();
-  }
-
-  function selectLongBreak() {
-    stopTimer();
-    setTimerState('LONG_BREAK_READY');
-    start();
+    setTimerType(type);
+    setTimerState('READY');
   }
 
   return (
     <div>
-      <TimerSelectors
-        timerState={timerState()}
-        selectPomo={selectPomo}
-        selectShortBreak={selectShortBreak}
-        selectLongBreak={selectLongBreak}
-      />
+      <TimerSelectors selectCountdownType={selectCountdownType} />
       <TimerDisplay time={time()} />
       <ControlButtons
         timerState={timerState()}
-        start={start}
         toggleCountdown={toggleCountdown}
         resetTimer={resetTimer}
       />
-      <p>Pomos today: {pomoCount()}</p>
+      <p>pomos today: {pomoCount()}</p>
     </div>
   );
 }
