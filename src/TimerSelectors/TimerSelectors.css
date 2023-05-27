@@ -1,0 +1,11 @@
+.timer-selectors {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+}
+@media (max-width: 390px) {
+  .timer-selectors .btn {
+    font-size: 20px;
+  }
+}

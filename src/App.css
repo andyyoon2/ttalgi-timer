@@ -1,0 +1,22 @@
+.container {
+  max-width: 450px;
+  margin: 0 auto;
+}
+
+main {
+  text-align: center;
+}
+
+h1 {
+  color: #fcaab9;
+  font-size: 80px;
+  margin-top: 0.5em;
+  margin-bottom: 0;
+}
+h2 {
+  /* TODO improve colors, this is low contrast */
+  color: #bab9b9;
+  font-size: 40px;
+  margin-top: 0;
+  margin-bottom: 2em;
+}

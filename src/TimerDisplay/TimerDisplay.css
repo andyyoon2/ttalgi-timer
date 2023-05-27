@@ -1,0 +1,12 @@
+.display {
+  font-size: 96px;
+  font-family: 'Chivo Mono',
+    source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+  margin: 0.625em 0;
+}
+.skinny-colon {
+  display: inline-block;
+  letter-spacing: -0.25em;
+  transform: translateX(-33%);
+}

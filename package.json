@@ -1,7 +1,7 @@
 {
-  "name": "solid-pomodoro",
+  "name": "ttalgi-timer",
   "version": "0.0.1",
-  "description": "",
+  "description": "A sweeter pomodoro timer",
   "scripts": {
     "start": "vite",
     "dev": "vite",
