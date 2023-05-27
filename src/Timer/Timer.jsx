@@ -1,7 +1,8 @@
 import { createEffect, createSignal, onCleanup } from 'solid-js';
-import ControlButtons from './ControlButtons';
-import TimerDisplay from './TimerDisplay/TimerDisplay';
-import TimerSelectors from './TimerSelectors/TimerSelectors';
+import ControlButtons from '../ControlButtons/ControlButtons';
+import TimerDisplay from '../TimerDisplay/TimerDisplay';
+import TimerSelectors from '../TimerSelectors/TimerSelectors';
+import './Timer.css';
 
 /*
 TIMER TYPE
@@ -16,9 +17,9 @@ STOP
 */
 
 const COUNTDOWN_TIMES = {
-  'POMO': 25 * 60,
-  'SHORT_BREAK': 5 * 60,
-  'LONG_BREAK': 10 * 60,
+  POMO: 25 * 60,
+  SHORT_BREAK: 5 * 60,
+  LONG_BREAK: 10 * 60,
 };
 
 export default function Timer() {
@@ -109,7 +110,7 @@ export default function Timer() {
         toggleCountdown={toggleCountdown}
         resetTimer={resetTimer}
       />
-      <p>pomos today: {pomoCount()}</p>
+      <p class="pomo-count">pomodoros today: {pomoCount()}</p>
     </div>
   );
 }

@@ -1,0 +1,14 @@
+.control-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  width: 60%;
+  margin: 0 auto;
+}
+.control-buttons .start-btn {
+  flex: 2;
+}
+.control-buttons .reset-btn {
+  flex: 1;
+}
