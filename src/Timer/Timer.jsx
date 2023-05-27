@@ -82,10 +82,15 @@ export default function Timer() {
   }
 
   function toggleCountdown() {
-    if (timerState() === 'COUNTDOWN') {
-      setTimerState('STOP');
-    } else {
-      setTimerState('COUNTDOWN');
+    switch (timerState()) {
+      case 'COUNTDOWN':
+        setTimerState('STOP');
+        break;
+      default:
+        if (time() === 0) {
+          setTimerState('READY');
+        }
+        setTimerState('COUNTDOWN');
     }
   }
 
