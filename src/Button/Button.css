@@ -3,6 +3,7 @@
   background: none;
   border: 2px solid transparent;
   border-radius: 60px;
+  color: inherit;
   cursor: pointer;
   padding: 12px 24px;
   font-size: 24px;
@@ -16,17 +17,19 @@
 .btn.outline {
   border-color: #fcaab9;
 }
-.btn:hover {
-  background-color: #fa7990;
-  border-color: transparent;
-  transform: translateY(-1px);
-  box-shadow: 0 1px 4px #c5aeb2;
-}
 .btn.fill.accent {
   background-color: #f84867;
   box-shadow: 0 1px 12px #fa7990;
   color: #fffdfe;
 }
-.btn.fill.accent:hover {
-  box-shadow: 0 3px 14px 2px #fa7990;
+@media (hover: hover) {
+  .btn:hover {
+    background-color: #fa7990;
+    border-color: transparent;
+    transform: translateY(-1px);
+    box-shadow: 0 1px 4px #c5aeb2;
+  }
+  .btn.fill.accent:hover {
+    box-shadow: 0 3px 14px 2px #fa7990;
+  }
 }
