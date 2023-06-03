@@ -23,7 +23,13 @@ const COUNTDOWN_TIMES = {
 };
 
 export default function Timer() {
-  const [time, setTime] = createSignal(0);
+  // Time displayed in the UI
+  const [timeRemaining, setTimeRemaining] = createSignal(0);
+
+  // Internal counters to compensate for CPU drift
+  const [startTime, setStartTime] = createSignal(0);
+  const [elapsedTime, setElapsedTime] = createSignal(0);
+
   const [pomoCount, setPomoCount] = createSignal(0); // TODO: Use localStorage for total count?
   const [timerId, setTimerId] = createSignal(null);
 
@@ -34,7 +40,7 @@ export default function Timer() {
     switch (timerState()) {
       case 'READY':
         stopTimer();
-        setTime(COUNTDOWN_TIMES[timerType()]);
+        setTimeRemaining(COUNTDOWN_TIMES[timerType()]);
         break;
       case 'COUNTDOWN':
         startTimer();
@@ -58,18 +64,19 @@ export default function Timer() {
   }
 
   function tick() {
-    // TODO: Calculate drift to get most accurate timer
-    setTimerId(
-      setTimeout(() => {
-        setTime(time => time - 1);
-        if (time() === 0) {
-          setPomoCount(c => c + 1);
-          setTimerState('STOP'); // TODO: Optional advance to next step in pomo cycle
-          return;
-        }
-        tick();
-      }, 1000)
-    );
+    // Calculate drift to get most accurate timer
+    const drift = new Date().getTime() - startTime() - elapsedTime();
+    const id = setTimeout(() => {
+      setTimeRemaining(time => time - 1);
+      setElapsedTime(time => time + 1000);
+      if (timeRemaining() === 0) {
+        setPomoCount(c => c + 1);
+        setTimerState('STOP'); // TODO: Optional advance to next step in pomo cycle
+        return;
+      }
+      tick();
+    }, 1000 - drift);
+    setTimerId(id);
   }
 
   function stopTimer() {
@@ -81,17 +88,31 @@ export default function Timer() {
     setTimerState('READY');
   }
 
+  function prepTimerStart() {
+    setStartTime(new Date().getTime());
+    setElapsedTime(0);
+  }
+
   function toggleCountdown() {
     switch (timerState()) {
       case 'COUNTDOWN':
         setTimerState('STOP');
         break;
-      default:
-        if (time() === 0) {
-          setTimerState('READY');
+      case 'READY':
+        prepTimerStart();
+        setTimerState('COUNTDOWN');
+        break;
+      case 'STOP':
+        if (timeRemaining() === 0) {
+          resetTimer();
+          prepTimerStart();
         }
         setTimerState('COUNTDOWN');
+        break;
+      default:
+        console.error('Error: Invalid timer state.');
     }
+
   }
 
   function selectTimerType(type) {
@@ -111,7 +132,7 @@ export default function Timer() {
       />
       <TimerDisplay
         timerState={timerState()}
-        time={time()}
+        time={timeRemaining()}
       />
       <ControlButtons
         timerState={timerState()}
