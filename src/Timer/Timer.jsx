@@ -70,7 +70,9 @@ export default function Timer() {
       setTimeRemaining(time => time - 1);
       setElapsedTime(time => time + 1000);
       if (timeRemaining() === 0) {
-        setPomoCount(c => c + 1);
+        if (timerType() === 'POMO') {
+          setPomoCount(c => c + 1);
+        }
         setTimerState('STOP'); // TODO: Optional advance to next step in pomo cycle
         return;
       }
